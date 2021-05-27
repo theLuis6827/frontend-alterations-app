@@ -5,6 +5,7 @@
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  outline: 3px solid red;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -25,6 +26,7 @@
 }
 
 .App-link {
+  outline: 3px solid red;
   color: #61dafb;
 }
 
