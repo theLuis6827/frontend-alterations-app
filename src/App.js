@@ -1,21 +1,27 @@
-// import logo from './logo.svg';
-// import Home from './home/Home'
-// import Login from './components/auth/Login'
-// import Contact from './components/Contact'
-// import Services from './components/Services'
 import Routes from './Routes'
 import './App.css';
 import React from 'react';
+import Header from './components/Header'
 
 class App extends React.Component {
   state = {
     name: "",
     email: "",
     phone: "",
-    username: ""
+    username: "",
+    alterations: [],
+    userItems: []
   }
 
   componentDidMount() {
+    fetch('http://localhost:3000/api/v1/alterations')
+    .then(res => res.json())
+    .then(data => {
+      this.setState({
+        alterations: data
+      })
+    })
+
     if(localStorage.token){
       fetch('http://localhost:3000/api/v1/profile', {
         method: 'GET',
@@ -24,14 +30,13 @@ class App extends React.Component {
         }
       })
       .then(res => res.json())
-      .then(res => {
-        this.updateUserState(res.user)
+      .then(data => {
+        this.updateUserState(data.user)
       })
     }
   }
 
   updateUserState = (user) => {
-    console.log(user)
     this.setState({
       name: user.name,
       email: user.email,
@@ -40,10 +45,26 @@ class App extends React.Component {
     })
   }
 
+  updateUserItems = (newItems) => {
+    this.setState({
+      userItems: newItems
+    })
+  }
+
   render() {
       return (
         <div className="App">
-          <Routes state={this.state} updateUserState={this.updateUserState} />
+          <Header 
+            updateUserState={this.updateUserState} 
+            username={this.state.username}
+          />
+          <Routes
+            state={this.state}
+            updateUserState={this.updateUserState} 
+            updateUserItems={this.updateUserItems} 
+            user={this.state} 
+            userItems={this.state.userItems} 
+          />
         </div>
       )
   }

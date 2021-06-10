@@ -1,4 +1,6 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
+
 
 class Login extends React.Component {
     state = {
@@ -7,7 +9,6 @@ class Login extends React.Component {
     }
 
     handleSubmit = (e) => {
-        console.log("Form Submit")
         e.preventDefault()
         fetch('http://localhost:3000/api/v1/login', {
             method: 'POST',
@@ -21,7 +22,6 @@ class Login extends React.Component {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data)
             if(data.user){
                 localStorage.setItem("token", data.jwt)
                 this.props.updateUserState({
@@ -35,6 +35,11 @@ class Login extends React.Component {
         })
     }
 
+    handleLogout = () => {
+        localStorage.clear()
+        this.props.history.push("/")
+    }
+
     handleChange = (e) => {
         const { name, value } = e.target
         console.log("handle change", e.target.name)
@@ -46,26 +51,35 @@ class Login extends React.Component {
     render() {
         return(
             <>
-            <h1> this be Login </h1>
-            <form onSubmit={(e) => this.handleSubmit(e)}>
-                <input 
-                    type="text"
-                    name="username"
-                    placeholder="Enter Username"
-                    value={this.state.username}
-                    onChange={(e) => this.handleChange(e)}
+                <br />
+                <h1> Login </h1>
+                <br />
+                <form onSubmit={(e) => this.handleSubmit(e)}>
+                    <input 
+                        type="text"
+                        name="username"
+                        placeholder="Enter Username"
+                        value={this.state.username}
+                        onChange={(e) => this.handleChange(e)}
                     />
-                <input 
-                    type="password"
-                    name="password"
-                    value={this.state.password}
-                    placeholder="Enter Password"
-                    onChange={(e) => this.handleChange(e)}
-                />
-                <button type="submit">Log In</button>
-            </form>
-            <h1>Username: {this.state.username}</h1>
-            <h1>Password: {this.state.password}</h1>
+                    <br />
+                    <br />
+
+                    <input 
+                        type="password"
+                        name="password"
+                        value={this.state.password}
+                        placeholder="Enter Password"
+                        onChange={(e) => this.handleChange(e)}
+                    />
+                    <br />
+                    <br />
+
+                    <button type="submit">Log In</button>
+                    <br />
+                    <br />
+                </form>
+                <Link to="/register" className="link" >Create an Account</Link>
             </>
         )
     }
